@@ -1,7 +1,12 @@
 import numpy as np
 import tensorflow as tf
 import gym
+from matplotlib import pyplot as plt
 import time
+import re
+
+import os
+import pickle
 import safe_rl.pg.trust_region as tro
 from safe_rl.pg.agents import PPOAgent, TRPOAgent, CPOAgent
 from safe_rl.pg.buffer import CPOBuffer
@@ -24,8 +29,8 @@ def run_polopt_agent(env_fn,
                      seed=0,
                      render=False,
                      # Experience collection:
-                     steps_per_epoch=4000, 
-                     epochs=50, 
+                     steps_per_epoch=5000,
+                     epochs=150,
                      max_ep_len=1000,
                      # Discount factors:
                      gamma=0.99, 
@@ -35,7 +40,7 @@ def run_polopt_agent(env_fn,
                      # Policy learning:
                      ent_reg=0.,
                      # Cost constraints / penalties:
-                     cost_lim=25,
+                     cost_lim=5,
                      penalty_init=1.,
                      penalty_lr=5e-2,
                      # KL divergence:
@@ -64,7 +69,8 @@ def run_polopt_agent(env_fn,
     env = env_fn()
 
     agent.set_logger(logger)
-
+    return_List = []
+    Constraint_Values_List = []
     #=========================================================================#
     #  Create computation graph for actor and critic (not training routine)   #
     #=========================================================================#
@@ -389,6 +395,7 @@ def run_polopt_agent(env_fn,
             terminal = d or (ep_len == max_ep_len)
             if terminal or (t==local_steps_per_epoch-1):
 
+
                 # If trajectory didn't reach terminal state, bootstrap value target(s)
                 if d and not(ep_len == max_ep_len):
                     # Note: we do not count env time out as true terminal state
@@ -405,8 +412,10 @@ def run_polopt_agent(env_fn,
                 # Only save EpRet / EpLen if trajectory finished
                 if terminal:
                     logger.store(EpRet=ep_ret, EpLen=ep_len, EpCost=ep_cost)
+
                 else:
                     print('Warning: trajectory cut off by epoch at %d steps.'%ep_len)
+
 
                 # Reset environment
                 o, r, d, c, ep_ret, ep_len, ep_cost = env.reset(), 0, False, 0, 0, 0, 0
@@ -434,7 +443,13 @@ def run_polopt_agent(env_fn,
 
         # Performance stats
         logger.log_tabular('EpRet', with_min_and_max=True)
+        temp = logger.log_current_row.get('AverageEpRet')
+        return_List.append(temp)
+
+
         logger.log_tabular('EpCost', with_min_and_max=True)
+        temp2 = logger.log_current_row.get('AverageEpCost')
+        Constraint_Values_List.append(temp2)
         logger.log_tabular('EpLen', average_only=True)
         logger.log_tabular('CumulativeCost', cumulative_cost)
         logger.log_tabular('CostRate', cost_rate)
@@ -481,6 +496,14 @@ def run_polopt_agent(env_fn,
         # Show results!
         logger.dump_tabular()
 
+    # save the List to disk
+    RetAndCos=[return_List,Constraint_Values_List]
+
+    filename = str(type(agent)) +'_average_returns_and_Costs_per_epoch' + env.spec.id + '.sav'
+    pickle.dump(RetAndCos, open(filename, 'wb'))
+
+
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
@@ -493,7 +516,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', '-s', type=int, default=0)
     parser.add_argument('--cpu', type=int, default=4)
     parser.add_argument('--steps', type=int, default=4000)
-    parser.add_argument('--epochs', type=int, default=50)
+    parser.add_argument('--epochs', type=int, default=150)
     parser.add_argument('--len', type=int, default=1000)
     parser.add_argument('--cost_lim', type=float, default=10)
     parser.add_argument('--exp_name', type=str, default='runagent')

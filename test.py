@@ -11,16 +11,16 @@ import pickle
 
 
 
-all_envs = gym.envs.registry
+#all_envs = gym.envs.registry
 #env = gym.make('SafetyHopperRun-v0')
-env = gym.make('SafetyHumanoidCircle-v0')
+#env = gym.make('SafetyHumanoidCircle-v0')
 #env = gym.make('SafetyAntCircle-v0') #epcost=0
-#env = gym.make('SafetyBallReach-v2')
+env = gym.make('SafetyBallReach-v2')
 
 
 
-#cpo(env_fn = lambda : env,epochs=150,ac_kwargs=dict(hidden_sizes=(64, 32)))
-trpo_lagrangian(env_fn = lambda : env,epochs=10,ac_kwargs=dict(hidden_sizes=(64, 32)))
+cpo(env_fn = lambda : env,epochs=1000,cost_lim=1,ac_kwargs=dict(hidden_sizes=(64, 32)))
+#trpo_lagrangian(env_fn = lambda : env,epochs=10,ac_kwargs=dict(hidden_sizes=(64, 32)))
 
 
 

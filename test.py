@@ -14,7 +14,7 @@ env = gym.make('SafetyBallReach-v2')
 
 
 
-cpo(env_fn = lambda : env,epochs=150,cost_lim=50,ac_kwargs=dict(hidden_sizes=(64, 32)))
+cpo(env_fn = lambda : env,epochs=150,cost_lim=25,ac_kwargs=dict(hidden_sizes=(64, 32)))
 #trpo_lagrangian(env_fn = lambda : env,epochs=20,ac_kwargs=dict(hidden_sizes=(64, 32)))
 
 

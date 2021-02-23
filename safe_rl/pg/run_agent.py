@@ -51,7 +51,7 @@ def run_polopt_agent(env_fn,
                      # Logging:
                      logger=None, 
                      logger_kwargs=dict(), 
-                     save_freq=1
+                     save_freq=1,
                      FileName="testFileName"
                      ):
 

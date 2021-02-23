@@ -10,11 +10,11 @@ from safe_rl import cpo
 #env = gym.make('SafetyHopperRun-v0')
 #env = gym.make('SafetyHumanoidCircle-v0')
 #env = gym.make('SafetyAntCircle-v0') #epcost=0
-env = gym.make('SafetyBallReach-v2')
+env = gym.make('SafetyBallReach-v0')
 
 
 
-cpo(env_fn = lambda : env,epochs=150,cost_lim=100,ac_kwargs=dict(hidden_sizes=(64, 32)))
+cpo(env_fn = lambda : env,FileName="CPO",epochs=150,cost_lim=1,ac_kwargs=dict(hidden_sizes=(64, 32)))
 #trpo_lagrangian(env_fn = lambda : env,epochs=20,ac_kwargs=dict(hidden_sizes=(64, 32)))
 
 

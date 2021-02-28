@@ -378,7 +378,7 @@ def run_polopt_agent(env_fn,
 
             # Track cumulative cost over training
             cum_cost += c
-
+            r = r - c
             # save and log
             if agent.reward_penalized:
                 r_total = r - cur_penalty * c

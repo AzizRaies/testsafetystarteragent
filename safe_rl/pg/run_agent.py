@@ -53,6 +53,7 @@ def run_polopt_agent(env_fn,
                      logger_kwargs=dict(), 
                      save_freq=1,
                      FileName="testFileName"
+                     alpha = 1
                      ):
 
 
@@ -378,7 +379,7 @@ def run_polopt_agent(env_fn,
 
             # Track cumulative cost over training
             cum_cost += c
-            r = r - c
+            r = r - (alpha * c)
             # save and log
             if agent.reward_penalized:
                 r_total = r - cur_penalty * c

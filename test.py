@@ -16,7 +16,7 @@ env = gym.make('SafetyBallReach-v0')
 
 
 
-cpo(env_fn = lambda : env,FileName="CPO_OneSignal_Seed1_new", seed = 1 ,epochs=150,cost_lim=0,ac_kwargs=dict(hidden_sizes=(64, 32)))
+cpo(env_fn = lambda : env,FileName="CPO_OneSignal_Seed2_new", seed = 2 ,epochs=150,cost_lim=0,ac_kwargs=dict(hidden_sizes=(64, 32)))
 #trpo_lagrangian(env_fn = lambda : env,FileName="TRPO_Seed3_alpha_0.5",alpha =0.5 ,epochs=150,cost_lim=10,ac_kwargs=dict(hidden_sizes=(64, 32)))
 
 

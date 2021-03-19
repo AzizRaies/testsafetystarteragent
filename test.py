@@ -1,5 +1,5 @@
 import gym
-import open_safety_gym
+#import open_safety_gym
 import bullet_safety_gym
 
 from safe_rl import cpo

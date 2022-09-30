@@ -12,7 +12,7 @@ setup(
     packages=['safe_rl'],
     install_requires=[
         
-        'joblib==0.14.0',
+        'joblib==1.2.0',
         'matplotlib==3.1.1',
         'mpi4py==3.0.2',
         'seaborn==0.8.1',
